@@ -1,8 +1,13 @@
-import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
+import { RendererAPI } from '../index.types'
 
 // Custom APIs for renderer
-const api = {}
+const api: RendererAPI = {
+  getModsPath: () => ipcRenderer.invoke('get-mods-path'),
+  chooseDirectory: () => ipcRenderer.invoke('choose-directory'),
+  updateModpack: (path: string) => ipcRenderer.invoke('update-modpack', path)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
