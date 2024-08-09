@@ -2,7 +2,7 @@ export const t = {
   error_unknown: (message: string): string => `An unknown error has occured! ${message}`,
   error_no_appdata_env: 'The application could not access the process.env.APPDATA variable.',
   error_file_not_exists: (path: string): string =>
-    `The application could not access the given path: ${path}.`,
+    `The application could not access the given path: ${path}`,
   error_choose_directory: `The application could not access the chosen directory. This is not intended!`,
   error_no_mods_path: 'The application could not resolve the given mods path.',
   error_response_not_ok:

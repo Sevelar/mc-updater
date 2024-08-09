@@ -11,12 +11,11 @@ import { CustomError } from '../index.types'
 export function createIPCHandlers(mainWindow: BrowserWindow): void {
   ipcMain.handle('get-mods-path', getModsPath)
   ipcMain.handle('choose-directory', () => chooseDirectory(mainWindow))
-  // @ts-ignore not
-  ipcMain.handle('update-modpack', updateModpack)
+  ipcMain.handle('update-modpack', (_event, path: string) => updateModpack(path))
 }
 
 async function getModsPath(): Promise<string> {
-  if (!process.env.APPDATA) throw new CustomError(t.error_no_appdata_env)
+  if (!process.env.APPDATA) throw t.error_no_appdata_env
 
   const path = join(process.env.APPDATA, '.minecraft/mods')
 
@@ -24,11 +23,11 @@ async function getModsPath(): Promise<string> {
     await access(path, constants.F_OK)
     return path
   } catch {
-    throw new CustomError(t.error_file_not_exists(path))
+    throw t.error_file_not_exists(path)
   }
 }
 
-// @ts-ignore Shut up.
+// @ts-ignore Shut up. LMAO!
 async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | false> {
   try {
     const response = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory'] })
@@ -37,16 +36,16 @@ async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | fals
     if (!response.filePaths.length) throw new CustomError(t.error_choose_directory)
     else return response.filePaths[0]
   } catch (error) {
-    if (error instanceof CustomError) throw error
+    if (error instanceof CustomError) throw error.message
     else {
-      if (typeof error === 'string') throw new CustomError(t.error_unknown(error))
-      else if (error instanceof Error) throw new CustomError(t.error_unknown(error.message))
+      if (typeof error === 'string') throw t.error_unknown(error)
+      else if (error instanceof Error) throw t.error_unknown(error.message)
     }
   }
 }
 
 async function updateModpack(path: string): Promise<void> {
-  if (!path) throw new CustomError(t.error_no_mods_path)
+  if (!path) throw t.error_no_mods_path
 
   try {
     await access(path, constants.F_OK)
@@ -77,10 +76,10 @@ async function updateModpack(path: string): Promise<void> {
     //   })
     // })
   } catch (error) {
-    if (error instanceof CustomError) throw error
+    if (error instanceof CustomError) throw error.message
     else {
-      if (typeof error === 'string') throw new CustomError(t.error_unknown(error))
-      else if (error instanceof Error) throw new CustomError(t.error_unknown(error.message))
+      if (typeof error === 'string') throw t.error_unknown(error)
+      else if (error instanceof Error) throw t.error_unknown(error.message)
     }
   }
 }
