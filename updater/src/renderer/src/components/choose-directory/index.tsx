@@ -1,20 +1,19 @@
 import { FolderOpenOutlined, FolderTwoTone } from '@ant-design/icons'
+import { useOptions } from '@renderer/index.hooks'
+import { t } from '@shared/index.consts'
+import { RendererAPI } from '@shared/index.types'
 import { Button, Flex, Input, Space, Typography } from 'antd'
-import { MessageInstance } from 'antd/es/message/interface'
 import { ReactNode, useEffect, useState } from 'react'
-import { t } from '../../../../index.consts'
-import { RendererAPI } from '../../../../index.types'
 
 const { Compact } = Space
 const { Paragraph, Title, Text } = Typography
 
 const rendererAPI = window.api as RendererAPI
 
-interface ChooseDirectoryProps {
-  message: MessageInstance
-}
-export function ChooseDirectory({ message }: ChooseDirectoryProps): ReactNode {
+export function ChooseDirectory(): ReactNode {
   const [modsPath, setModsPath] = useState('')
+  const { options } = useOptions()
+  const { messageApi } = options
 
   async function onGetModsPath(): Promise<void> {
     try {
@@ -22,7 +21,7 @@ export function ChooseDirectory({ message }: ChooseDirectoryProps): ReactNode {
       setModsPath(path)
     } catch (error) {
       if (error instanceof Error) {
-        message.error(error.message)
+        messageApi!.error(error.message)
       }
     }
   }
@@ -32,11 +31,11 @@ export function ChooseDirectory({ message }: ChooseDirectoryProps): ReactNode {
       const path = await rendererAPI.chooseDirectory()
       if (typeof path === 'string') {
         setModsPath(path)
-        message.success(t.success_mods_path_changed)
+        messageApi!.success(t.success_mods_path_changed)
       }
     } catch (error) {
       if (error instanceof Error) {
-        message.error(error.message)
+        messageApi!.error(error.message)
       }
     }
   }
