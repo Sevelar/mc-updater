@@ -1,17 +1,22 @@
+import { randomUUID } from 'crypto'
 import { BrowserWindow, dialog, ipcMain } from 'electron'
 import { createWriteStream } from 'fs'
-import { access, constants } from 'fs/promises'
-import { join } from 'path'
+import { access, constants, lstat, mkdir, readdir, rename, rm, unlink } from 'fs/promises'
+import { tmpdir } from 'os'
+import { join, resolve } from 'path'
 import { Readable } from 'stream'
-import { finished } from 'stream/promises'
-import yauzl from 'yauzl'
+import { finished, pipeline } from 'stream/promises'
+// import yauzl from 'yauzl'
+import yauzl from 'yauzl-promise'
 import { t } from '../index.consts'
-import { CustomError } from '../index.types'
+import { CustomError, UpdateModpackOptions } from '../index.types'
 
 export function createIPCHandlers(mainWindow: BrowserWindow): void {
   ipcMain.handle('get-mods-path', getModsPath)
   ipcMain.handle('choose-directory', () => chooseDirectory(mainWindow))
-  ipcMain.handle('update-modpack', (_event, path: string) => updateModpack(path))
+  ipcMain.handle('update-modpack', (_event, path: string, options?: UpdateModpackOptions) =>
+    updateModpack(path, options)
+  )
 }
 
 async function getModsPath(): Promise<string> {
@@ -27,7 +32,6 @@ async function getModsPath(): Promise<string> {
   }
 }
 
-// @ts-ignore Shut up. LMAO!
 async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | false> {
   try {
     const response = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory'] })
@@ -41,45 +45,88 @@ async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | fals
       if (typeof error === 'string') throw t.error_unknown(error)
       else if (error instanceof Error) throw t.error_unknown(error.message)
     }
+    throw t.error_unknown('???')
   }
 }
 
-async function updateModpack(path: string): Promise<void> {
-  if (!path) throw t.error_no_mods_path
+async function updateModpack(modsPath: string, options?: UpdateModpackOptions): Promise<void> {
+  if (!modsPath) throw t.error_no_mods_path
+
+  const tempFolderPath = join(tmpdir(), `updater-${randomUUID()}`)
+  const modpackFilePath = join(tempFolderPath, 'the-7th-guild-modpack.zip')
+  const backupFolderPath = resolve(modsPath, `../mods-${Date.now()}`)
 
   try {
-    await access(path, constants.F_OK)
-    const modpackFilePath = join(path, 'the-7th-modpack.zip')
+    // Create mods folder, if for some reason it doesn't exist
+    try {
+      await access(modsPath, constants.F_OK)
+    } catch {
+      await mkdir(modsPath)
+    }
+
+    if (options?.enableBackup) {
+      const modsFolder = await readdir(modsPath)
+      if (modsFolder.length) {
+        // Rename mods to mods-<timestamp>
+        await rename(modsPath, backupFolderPath)
+        await mkdir(modsPath)
+      }
+    } else {
+      // Delete all files in mods folder
+      const modsFolder = await readdir(modsPath)
+      if (modsFolder.length) {
+        for (const file of modsFolder) {
+          const isDirectory = (await lstat(join(modsPath, file))).isDirectory()
+
+          if (isDirectory) await rm(join(modsPath, file), { recursive: true, force: true })
+          else await unlink(join(modsPath, file))
+        }
+      }
+    }
 
     const response = await fetch('https://7st.io/static/modpack')
     if (response.status !== 200) throw new CustomError(t.error_response_not_ok)
 
-    // if (!response.body) throw new CustomError(t.error_response_no_body)
+    if (!response.body) throw new CustomError(t.error_response_no_body)
 
-    // const outputStream = createWriteStream(modpackFilePath)
-    // // @ts-ignore Wrong typing
-    // await finished(Readable.fromWeb(response.body).pipe(outputStream))
+    await mkdir(tempFolderPath)
 
-    // yauzl.open(modpackFilePath, (error, file) => {
-    //   if (error) throw new CustomError(t.error_archive_error)
+    const outputStream = createWriteStream(modpackFilePath)
+    // @ts-ignore Wrong typing
+    await finished(Readable.fromWeb(response.body).pipe(outputStream))
+    outputStream.close()
 
-    //   file.readEntry()
-
-    //   file.on("entry", (entry) => {
-    //     if (/\/$/.test(entry.fileName)) return file.readEntry()
-
-    //     file.openReadStream(entry, (error, readStream) => {
-    //       if (error) throw new CustomError(t.error_archive_error)
-    //       readStream.on("end", () => file.readEntry())
-    //       readStream.pipe(path)
-    //     })
-    //   })
-    // })
+    const archive = await yauzl.open(modpackFilePath)
+    for await (const entry of archive) {
+      if (entry.filename.endsWith('/')) {
+        await mkdir(join(modsPath, entry.filename), { recursive: true })
+      } else {
+        const readStream = await entry.openReadStream()
+        const writeStream = createWriteStream(join(modsPath, entry.filename))
+        await pipeline(readStream, writeStream)
+      }
+    }
+    await archive.close()
   } catch (error) {
+    console.error(error)
+    try {
+      // Recover backup
+      await rm(modsPath, { recursive: true, force: true })
+      await rename(backupFolderPath, modsPath)
+    } catch (error) {
+      if (error instanceof CustomError) throw error.message
+      else {
+        if (typeof error === 'string') throw t.error_unknown(error)
+        else if (error instanceof Error) throw t.error_unknown(error.message)
+      }
+    }
+
     if (error instanceof CustomError) throw error.message
     else {
       if (typeof error === 'string') throw t.error_unknown(error)
       else if (error instanceof Error) throw t.error_unknown(error.message)
     }
+  } finally {
+    await rm(tempFolderPath, { recursive: true, force: true })
   }
 }

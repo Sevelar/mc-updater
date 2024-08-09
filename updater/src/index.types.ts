@@ -7,7 +7,11 @@ export type CreateWindowReturn = {
 export interface RendererAPI {
   getModsPath: () => Promise<string>
   chooseDirectory: () => Promise<string | false>
-  updateModpack: (minecraftPath: string) => Promise<boolean>
+  updateModpack: (modsPath: string, options?: UpdateModpackOptions) => Promise<boolean>
 }
 
 export class CustomError extends Error {}
+
+export interface UpdateModpackOptions {
+  enableBackup: boolean
+}

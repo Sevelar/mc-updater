@@ -3,7 +3,7 @@ import { useOptions } from '@renderer/index.hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button, Flex, Input, Space, Typography } from 'antd'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 const { Compact } = Space
 const { Paragraph, Title, Text } = Typography
@@ -11,9 +11,8 @@ const { Paragraph, Title, Text } = Typography
 const rendererAPI = window.api as RendererAPI
 
 export function ChooseDirectory(): ReactNode {
-  const [modsPath, setModsPath] = useState('')
-  const { options } = useOptions()
-  const { messageApi } = options
+  const { options, setModsPath } = useOptions()
+  const { messageApi, modsPath } = options
 
   async function onGetModsPath(): Promise<void> {
     try {

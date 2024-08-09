@@ -8,7 +8,8 @@ export const t = {
   error_response_not_ok:
     'The application could not retrieve an OK status from the internal server!',
   error_response_no_body: 'The application could not retrieve a file from the internal server!',
-  error_archive_error: 'The applicatio could not access the archive file!',
+  error_archive_error: (message: string): string =>
+    `The application could not access the archive file! ${message}`,
 
   success_mods_path_changed: 'The mods path has been successfully changed.',
   success_modpack_updated: 'The modpack has been successfully updated!'

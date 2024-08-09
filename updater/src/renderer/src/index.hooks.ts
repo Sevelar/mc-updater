@@ -2,24 +2,29 @@ import { MessageInstance } from 'antd/es/message/interface'
 import { atom, useRecoilState } from 'recoil'
 
 interface Options {
-  messageApi: MessageInstance | null
   enableBackup: boolean
+  modsPath: string
+  messageApi: MessageInstance | null
 }
 const optionsAtom = atom<Options>({
   key: 'options',
   default: {
-    messageApi: null,
-    enableBackup: true
+    enableBackup: true,
+    modsPath: '',
+    messageApi: null
   }
 })
 
 export const useOptions = () => {
   const [options, setOptions] = useRecoilState(optionsAtom)
 
-  const setEnableBackup = (value: boolean) => setOptions({ ...options, enableBackup: value })
+  const setEnableBackup = (value: boolean) =>
+    setOptions((state) => ({ ...state, enableBackup: value }))
+
+  const setModsPath = (value: string) => setOptions((state) => ({ ...state, modsPath: value }))
 
   const setMessageApi = (value: MessageInstance | null) =>
-    setOptions({ ...options, messageApi: value })
+    setOptions((state) => ({ ...state, messageApi: value }))
 
-  return { options, setEnableBackup, setMessageApi }
+  return { options, setEnableBackup, setModsPath, setMessageApi }
 }
