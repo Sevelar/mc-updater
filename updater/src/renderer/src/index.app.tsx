@@ -4,12 +4,12 @@ import { useEffect } from 'react'
 import { ChooseDirectory } from './components/choose-directory'
 import { Options } from './components/options'
 import { UpdateModpack } from './components/update-modpack'
-import { useOptions } from './index.hooks'
+import { useGlobalStore } from './index.hooks'
 import minecraftTitle from './minecraft_title.png'
 
 export function App(): JSX.Element {
   const [message, contextHolder] = useMessage()
-  const { setMessageApi } = useOptions()
+  const { setMessageApi } = useGlobalStore()
 
   useEffect(() => {
     if (!message) return

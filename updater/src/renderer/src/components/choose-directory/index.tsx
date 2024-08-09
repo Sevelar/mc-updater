@@ -1,5 +1,5 @@
 import { FolderOpenOutlined, FolderTwoTone } from '@ant-design/icons'
-import { useOptions } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/index.hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button, Flex, Input, Space, Typography } from 'antd'
@@ -11,8 +11,8 @@ const { Paragraph, Title, Text } = Typography
 const rendererAPI = window.api as RendererAPI
 
 export function ChooseDirectory(): ReactNode {
-  const { options, setModsPath } = useOptions()
-  const { messageApi, modsPath } = options
+  const { store, setModsPath } = useGlobalStore()
+  const { messageApi, modsPath, isUpdating } = store
 
   async function onGetModsPath(): Promise<void> {
     try {
@@ -58,7 +58,8 @@ export function ChooseDirectory(): ReactNode {
           <Button
             icon={<FolderOpenOutlined />}
             className="hover:!border-red-500 hover:!text-red-500"
-            onClick={onChooseDirectory}
+            onClick={() => !isUpdating && onChooseDirectory()}
+            disabled={store.isUpdating}
           >
             Choose directory...
           </Button>

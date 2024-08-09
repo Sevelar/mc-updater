@@ -1,4 +1,4 @@
-import { useOptions } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/index.hooks'
 import Checkbox from 'antd/es/checkbox/Checkbox'
 import Flex from 'antd/es/flex'
 import Paragraph from 'antd/es/typography/Paragraph'
@@ -6,7 +6,9 @@ import Text from 'antd/es/typography/Text'
 import { ReactNode, useEffect, useState } from 'react'
 
 export function Backup(): ReactNode {
-  const { options, setEnableBackup } = useOptions()
+  const { store, setEnableBackup } = useGlobalStore()
+  const { isUpdating } = store
+
   const [timestamp, setTimestamp] = useState(Date.now())
 
   function setUnixTimestamp(): void {
@@ -27,8 +29,9 @@ export function Backup(): ReactNode {
     <Flex vertical gap={5}>
       <Flex gap={5}>
         <Checkbox
-          checked={options.enableBackup}
-          onChange={(e) => setEnableBackup(e.target.checked)}
+          checked={store.enableBackup}
+          onChange={(e) => !isUpdating && setEnableBackup(e.target.checked)}
+          disabled={isUpdating}
         />
         <Text strong>
           Create <Text code>mods</Text> folder backup before update.

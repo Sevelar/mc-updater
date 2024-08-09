@@ -1,19 +1,17 @@
-import { useOptions } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/index.hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button } from 'antd'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 const rendererAPI = window.api as RendererAPI
 
 export const UpdateModpack = (): ReactNode => {
-  const { options } = useOptions()
-  const { messageApi, modsPath, enableBackup } = options
-
-  const [isLoading, setIsLoading] = useState(false)
+  const { store, setIsUpdating } = useGlobalStore()
+  const { messageApi, modsPath, enableBackup, isUpdating } = store
 
   async function onUpdateModpack(): Promise<void> {
-    setIsLoading(true)
+    setIsUpdating(true)
     try {
       await rendererAPI.updateModpack(modsPath, { enableBackup })
       messageApi!.success(t.success_modpack_updated)
@@ -22,7 +20,7 @@ export const UpdateModpack = (): ReactNode => {
         messageApi!.error(error.message)
       }
     } finally {
-      setIsLoading(false)
+      setIsUpdating(false)
     }
   }
 
@@ -31,8 +29,8 @@ export const UpdateModpack = (): ReactNode => {
       type="primary"
       size="large"
       className="mt-5"
-      onClick={onUpdateModpack}
-      loading={isLoading}
+      onClick={() => !isUpdating && onUpdateModpack()}
+      loading={isUpdating}
     >
       Update Modpack
     </Button>

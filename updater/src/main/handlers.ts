@@ -6,7 +6,6 @@ import { tmpdir } from 'os'
 import { join, resolve } from 'path'
 import { Readable } from 'stream'
 import { finished, pipeline } from 'stream/promises'
-// import yauzl from 'yauzl'
 import yauzl from 'yauzl-promise'
 import { t } from '../index.consts'
 import { CustomError, UpdateModpackOptions } from '../index.types'
@@ -108,11 +107,15 @@ async function updateModpack(modsPath: string, options?: UpdateModpackOptions): 
     }
     await archive.close()
   } catch (error) {
-    console.error(error)
     try {
-      // Recover backup
-      await rm(modsPath, { recursive: true, force: true })
-      await rename(backupFolderPath, modsPath)
+      if (options?.enableBackup) {
+        await access(modsPath, constants.F_OK)
+        await access(backupFolderPath, constants.F_OK)
+
+        // Recover backup
+        await rm(modsPath, { recursive: true, force: true })
+        await rename(backupFolderPath, modsPath)
+      }
     } catch (error) {
       if (error instanceof CustomError) throw error.message
       else {
@@ -127,6 +130,7 @@ async function updateModpack(modsPath: string, options?: UpdateModpackOptions): 
       else if (error instanceof Error) throw t.error_unknown(error.message)
     }
   } finally {
+    await access(tempFolderPath, constants.F_OK)
     await rm(tempFolderPath, { recursive: true, force: true })
   }
 }

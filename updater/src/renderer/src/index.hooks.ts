@@ -1,30 +1,34 @@
 import { MessageInstance } from 'antd/es/message/interface'
 import { atom, useRecoilState } from 'recoil'
 
-interface Options {
+interface GlobalStore {
   enableBackup: boolean
   modsPath: string
   messageApi: MessageInstance | null
+  isUpdating: boolean
 }
-const optionsAtom = atom<Options>({
+const globalStoreAtom = atom<GlobalStore>({
   key: 'options',
   default: {
     enableBackup: true,
     modsPath: '',
-    messageApi: null
+    messageApi: null,
+    isUpdating: false
   }
 })
 
-export const useOptions = () => {
-  const [options, setOptions] = useRecoilState(optionsAtom)
+export const useGlobalStore = () => {
+  const [store, setStore] = useRecoilState(globalStoreAtom)
 
   const setEnableBackup = (value: boolean) =>
-    setOptions((state) => ({ ...state, enableBackup: value }))
+    setStore((state) => ({ ...state, enableBackup: value }))
 
-  const setModsPath = (value: string) => setOptions((state) => ({ ...state, modsPath: value }))
+  const setModsPath = (value: string) => setStore((state) => ({ ...state, modsPath: value }))
 
   const setMessageApi = (value: MessageInstance | null) =>
-    setOptions((state) => ({ ...state, messageApi: value }))
+    setStore((state) => ({ ...state, messageApi: value }))
 
-  return { options, setEnableBackup, setModsPath, setMessageApi }
+  const setIsUpdating = (value: boolean) => setStore((state) => ({ ...state, isUpdating: value }))
+
+  return { store, setEnableBackup, setModsPath, setMessageApi, setIsUpdating }
 }
