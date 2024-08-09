@@ -2,7 +2,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { BrowserWindow, app, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import { createIPCHandlers } from './handlers'
+import { createAutoUpdateHandlers, createIPCHandlers } from './handlers'
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -44,7 +44,7 @@ function createWindow(): BrowserWindow {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('severium.mcupdater')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -55,6 +55,7 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow()
   createIPCHandlers(mainWindow)
+  createAutoUpdateHandlers(mainWindow)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

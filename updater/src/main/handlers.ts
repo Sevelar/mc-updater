@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto'
 import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { createWriteStream } from 'fs'
 import { access, constants, lstat, mkdir, readdir, rename, rm, unlink } from 'fs/promises'
 import { tmpdir } from 'os'
@@ -16,6 +17,18 @@ export function createIPCHandlers(mainWindow: BrowserWindow): void {
   ipcMain.handle('update-modpack', (_event, path: string, options?: UpdateModpackOptions) =>
     updateModpack(path, options)
   )
+}
+
+export function createAutoUpdateHandlers(mainWindow: BrowserWindow): void {
+  autoUpdater.on('update-available', () => mainWindow.webContents.send('app-update-available'))
+  ipcMain.on('on-app-update-download', onAppUpdateDownload)
+
+  autoUpdater.on('download-progress', () =>
+    mainWindow.webContents.send('app-update-download-progress')
+  )
+
+  autoUpdater.on('update-downloaded', () => mainWindow.webContents.send('app-update-downloaded'))
+  ipcMain.on('on-app-update-install', onAppUpdateInstall)
 }
 
 async function getModsPath(): Promise<string> {
@@ -133,4 +146,12 @@ async function updateModpack(modsPath: string, options?: UpdateModpackOptions): 
     await access(tempFolderPath, constants.F_OK)
     await rm(tempFolderPath, { recursive: true, force: true })
   }
+}
+
+async function onAppUpdateDownload() {
+  autoUpdater.downloadUpdate()
+}
+
+async function onAppUpdateInstall() {
+  autoUpdater.quitAndInstall(true)
 }
