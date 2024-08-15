@@ -1,4 +1,4 @@
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import Checkbox from 'antd/es/checkbox/Checkbox'
 import Flex from 'antd/es/flex'
 import Paragraph from 'antd/es/typography/Paragraph'

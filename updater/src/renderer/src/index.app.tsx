@@ -3,7 +3,7 @@ import useMessage from 'antd/es/message/useMessage'
 import { useEffect } from 'react'
 import { AppMenu } from './components/app-menu'
 import { Modals } from './components/modals'
-import { useGlobalStore } from './index.hooks'
+import { useGlobalStore } from './hooks'
 import minecraftTitle from './minecraft_title.png'
 
 export function App(): JSX.Element {

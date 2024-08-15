@@ -1,4 +1,4 @@
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import { getMenuComponent } from './index.consts'
 
 export const Content = () => {

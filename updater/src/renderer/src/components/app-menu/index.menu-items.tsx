@@ -1,4 +1,4 @@
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import { Menu, MenuProps } from 'antd'
 import { menuItems } from './index.consts'
 

@@ -1,4 +1,4 @@
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button } from 'antd'

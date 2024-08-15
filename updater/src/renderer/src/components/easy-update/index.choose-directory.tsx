@@ -1,5 +1,5 @@
 import { FolderOpenOutlined, FolderTwoTone } from '@ant-design/icons'
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button, Input, Space, Typography } from 'antd'

@@ -1,5 +1,5 @@
 import { InfoCircleFilled } from '@ant-design/icons'
-import { useGlobalStore } from '@renderer/index.hooks'
+import { useGlobalStore } from '@renderer/hooks'
 import { Tooltip } from 'antd'
 import Checkbox from 'antd/es/checkbox/Checkbox'
 import Text from 'antd/es/typography/Text'
