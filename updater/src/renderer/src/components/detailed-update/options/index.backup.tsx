@@ -26,7 +26,7 @@ export function Backup(): ReactNode {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         <Checkbox
           checked={isBackupEnabled}
           onChange={(e) => !isModpackUpdating && setIsBackupEnabled(e.target.checked)}
@@ -37,11 +37,13 @@ export function Backup(): ReactNode {
           color="white"
           title={<TooltipContent {...{ timestamp }} />}
         >
-          <span className="font-semibold">
+          <span className="mr-4 font-semibold">
             Create <Text code>mods</Text> folder backup before update.
           </span>
-          <span className="text-xs italic">(Reveal more info)</span>
-          <InfoCircleFilled className="text-red-500" />
+          <div className="flex items-center leading-none gap-2">
+            <InfoCircleFilled className="text-red-500" />
+            <span className="text-xs italic">(Reveal more info)</span>
+          </div>
         </Tooltip>
       </div>
     </div>

@@ -5,10 +5,10 @@ export const Detailed = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex">
-        <RocketTwoTone twoToneColor="red" className="text-xl mr-1" />
-        <span className="mr-2 text-lg font-semibold">Modpack version:</span>
+        <RocketTwoTone twoToneColor="red" className="mr-1" />
+        <span className="mr-2 font-semibold">Modpack version:</span>
       </div>
-      <Radio.Group size="large">
+      <Radio.Group defaultValue={'compact-install'}>
         <Tooltip title="Only installs mods required by the server.">
           <Radio.Button value="compact-install">Compact Installation</Radio.Button>
         </Tooltip>

@@ -7,8 +7,8 @@ import { UpdateModpack } from './index.update-modpack'
 export const EasyUpdate = () => {
   return (
     <>
-      <img src={minecraftTitle} className="object-contain mb-5 h-40" />
-      <div className="flex flex-col gap-5">
+      <img src={minecraftTitle} className="object-contain mb-15 h-100" />
+      <div className="flex flex-col gap-10">
         <ChooseLauncher />
         <ChooseDirectory />
         <ChoosePackage.Simple />

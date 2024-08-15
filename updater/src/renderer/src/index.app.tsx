@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { AppMenu } from './components/app-menu'
 import { Modals } from './components/modals'
 import { useGlobalStore } from './hooks'
-import minecraftTitle from './minecraft_title.png'
 
 export function App(): JSX.Element {
   const [message, contextHolder] = useMessage()
@@ -19,11 +18,10 @@ export function App(): JSX.Element {
     <Layout>
       {contextHolder}
       <Modals />
-      <Layout.Sider className="py-5 !bg-white">
-        <img src={minecraftTitle} className="object-contain p-2" />
+      <Layout.Sider className="py-10 !bg-white">
         <AppMenu.Items />
       </Layout.Sider>
-      <Layout.Content className="flex flex-col justify-center px-10">
+      <Layout.Content className="flex flex-col justify-center px-15">
         <AppMenu.Content />
       </Layout.Content>
     </Layout>

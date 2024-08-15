@@ -3,6 +3,7 @@ import { useGlobalStore } from '@renderer/hooks'
 import { t } from '@shared/index.consts'
 import { RendererAPI } from '@shared/index.types'
 import { Button, Input, Space, Typography } from 'antd'
+import clsx from 'clsx'
 import { ReactNode, useEffect } from 'react'
 
 const { Compact } = Space
@@ -10,7 +11,10 @@ const { Paragraph, Text } = Typography
 
 const rendererAPI = window.api as RendererAPI
 
-export function ChooseDirectory(): ReactNode {
+interface ChooseDirectoryProps {
+  detailed?: boolean
+}
+export function ChooseDirectory({ detailed }: ChooseDirectoryProps): ReactNode {
   const { messageApi, isModpackUpdating, modsPath, setModsPath } = useGlobalStore()
 
   async function onGetModsPath(): Promise<void> {
@@ -43,13 +47,19 @@ export function ChooseDirectory(): ReactNode {
   }, [])
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-1">
-        <FolderTwoTone className="text-xl" twoToneColor="#ef4444" />
-        <span className="text-xl font-semibold">Mods Path:</span>
+    <div className="flex flex-col gap-5">
+      <div className="flex gap-2">
+        <FolderTwoTone className={clsx({ 'text-xl': !detailed })} twoToneColor="#ef4444" />
+        <span
+          className={clsx('font-semibold', {
+            'text-xl': !detailed
+          })}
+        >
+          Mods Path:
+        </span>
       </div>
 
-      <Compact size="large">
+      <Compact size={detailed ? 'middle' : 'large'}>
         <Input
           value={modsPath}
           className="hover:!border-red-500 focus:!border-red-500 focus-within:!border-red-500"
@@ -64,17 +74,19 @@ export function ChooseDirectory(): ReactNode {
         </Button>
       </Compact>
 
-      <Paragraph className="!m-0">
-        The <Text strong>mods folder</Text> should be by default located in{' '}
-        <Text code>C:\Users\%USERPROFILE\AppData\Roaming\.minecraft</Text>
-        folder.
-        <ul className="!m-0">
-          <li>
-            In case you use Prism Launcher:{' '}
-            <Text code>{`<PRIMS_LAUNCHER_FOLDER>\\instances\\<INSTANCE_NAME>\\.minecraft`}</Text>
-          </li>
-        </ul>
-      </Paragraph>
+      {!detailed ? (
+        <Paragraph className="!m-0">
+          The <Text strong>mods folder</Text> should be by default located in{' '}
+          <Text code>C:\Users\%USERPROFILE\AppData\Roaming\.minecraft</Text>
+          folder.
+          <ul className="!m-0">
+            <li>
+              In case you use Prism Launcher:{' '}
+              <Text code>{`<PRIMS_LAUNCHER_FOLDER>\\instances\\<INSTANCE_NAME>\\.minecraft`}</Text>
+            </li>
+          </ul>
+        </Paragraph>
+      ) : null}
     </div>
   )
 }

@@ -8,10 +8,10 @@ import { Options } from './options'
 export const DetailedUpdate = () => {
   return (
     <>
-      <img src={minecraftTitle} className="object-contain mb-5 h-32" />
-      <div className="flex flex-col gap-3">
-        <ChooseLauncher />
-        <ChooseDirectory />
+      <img src={minecraftTitle} className="object-contain mb-5 h-80" />
+      <div className="flex flex-col gap-10">
+        <ChooseLauncher detailed />
+        <ChooseDirectory detailed />
         <ChoosePackage.Detailed />
         <Options />
         <UpdateModpack />
