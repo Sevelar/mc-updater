@@ -6,8 +6,7 @@ import Text from 'antd/es/typography/Text'
 import { ReactNode, useEffect, useState } from 'react'
 
 export function Backup(): ReactNode {
-  const { store, setEnableBackup } = useGlobalStore()
-  const { isUpdating } = store
+  const { isUpdating, enableBackup, setEnableBackup } = useGlobalStore()
 
   const [timestamp, setTimestamp] = useState(Date.now())
 
@@ -29,7 +28,7 @@ export function Backup(): ReactNode {
     <Flex vertical gap={5}>
       <Flex gap={5}>
         <Checkbox
-          checked={store.enableBackup}
+          checked={enableBackup}
           onChange={(e) => !isUpdating && setEnableBackup(e.target.checked)}
           disabled={isUpdating}
         />

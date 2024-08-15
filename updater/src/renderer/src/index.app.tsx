@@ -1,10 +1,8 @@
-import Flex from 'antd/es/flex'
+import { Layout } from 'antd'
 import useMessage from 'antd/es/message/useMessage'
 import { useEffect } from 'react'
-import { ChooseDirectory } from './components/choose-directory'
+import { AppMenu } from './components/app-menu'
 import { Modals } from './components/modals'
-import { Options } from './components/options'
-import { UpdateModpack } from './components/update-modpack'
 import { useGlobalStore } from './index.hooks'
 import minecraftTitle from './minecraft_title.png'
 
@@ -18,13 +16,16 @@ export function App(): JSX.Element {
   }, [message])
 
   return (
-    <Flex vertical className="p-10">
+    <Layout>
       {contextHolder}
-      <img src={minecraftTitle} className="h-40 object-contain" />
-      <ChooseDirectory />
-      <Options />
-      <UpdateModpack />
       <Modals />
-    </Flex>
+      <Layout.Sider className="py-5 !bg-white">
+        <img src={minecraftTitle} className="object-contain p-2" />
+        <AppMenu.Items />
+      </Layout.Sider>
+      <Layout.Content className="flex flex-col justify-center px-10">
+        <AppMenu.Content />
+      </Layout.Content>
+    </Layout>
   )
 }

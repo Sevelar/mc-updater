@@ -6,29 +6,39 @@ interface GlobalStore {
   modsPath: string
   messageApi: MessageInstance | null
   isUpdating: boolean
+  selectedMenuItem: string
 }
 const globalStoreAtom = atom<GlobalStore>({
-  key: 'options',
+  key: 'global-store',
   default: {
     enableBackup: true,
     modsPath: '',
     messageApi: null,
-    isUpdating: false
+    isUpdating: false,
+    selectedMenuItem: 'easy-update'
   }
 })
 
 export const useGlobalStore = () => {
   const [store, setStore] = useRecoilState(globalStoreAtom)
 
-  const setEnableBackup = (value: boolean) =>
-    setStore((state) => ({ ...state, enableBackup: value }))
+  const setters = {
+    setEnableBackup: (value: boolean) => {
+      setStore((state) => ({ ...state, enableBackup: value }))
+    },
+    setModsPath: (value: string) => {
+      setStore((state) => ({ ...state, modsPath: value }))
+    },
+    setMessageApi: (value: MessageInstance | null) => {
+      setStore((state) => ({ ...state, messageApi: value }))
+    },
+    setIsUpdating: (value: boolean) => {
+      setStore((state) => ({ ...state, isUpdating: value }))
+    },
+    setSelectedMenuItem: (value: string) => {
+      setStore((state) => ({ ...state, selectedMenuItem: value }))
+    }
+  }
 
-  const setModsPath = (value: string) => setStore((state) => ({ ...state, modsPath: value }))
-
-  const setMessageApi = (value: MessageInstance | null) =>
-    setStore((state) => ({ ...state, messageApi: value }))
-
-  const setIsUpdating = (value: boolean) => setStore((state) => ({ ...state, isUpdating: value }))
-
-  return { store, setEnableBackup, setModsPath, setMessageApi, setIsUpdating }
+  return { ...store, ...setters }
 }

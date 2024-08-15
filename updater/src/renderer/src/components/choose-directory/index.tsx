@@ -11,8 +11,7 @@ const { Paragraph, Title, Text } = Typography
 const rendererAPI = window.api as RendererAPI
 
 export function ChooseDirectory(): ReactNode {
-  const { store, setModsPath } = useGlobalStore()
-  const { messageApi, modsPath, isUpdating } = store
+  const { messageApi, modsPath, isUpdating, setModsPath } = useGlobalStore()
 
   async function onGetModsPath(): Promise<void> {
     try {
@@ -59,7 +58,7 @@ export function ChooseDirectory(): ReactNode {
             icon={<FolderOpenOutlined />}
             className="hover:!border-red-500 hover:!text-red-500"
             onClick={() => !isUpdating && onChooseDirectory()}
-            disabled={store.isUpdating}
+            disabled={isUpdating}
           >
             Choose directory...
           </Button>

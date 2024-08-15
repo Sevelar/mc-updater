@@ -7,8 +7,8 @@ import { createIPCHandlers } from './handlers'
 function createWindow(): BrowserWindow {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 600,
+    width: 1100,
+    height: 700,
     show: false,
     autoHideMenuBar: true,
     resizable: false,

@@ -7,8 +7,7 @@ import { ReactNode } from 'react'
 const rendererAPI = window.api as RendererAPI
 
 export const UpdateModpack = (): ReactNode => {
-  const { store, setIsUpdating } = useGlobalStore()
-  const { messageApi, modsPath, enableBackup, isUpdating } = store
+  const { messageApi, modsPath, enableBackup, isUpdating, setIsUpdating } = useGlobalStore()
 
   async function onUpdateModpack(): Promise<void> {
     setIsUpdating(true)
