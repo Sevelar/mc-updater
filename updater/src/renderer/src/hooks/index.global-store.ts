@@ -1,21 +1,16 @@
+import { GlobalStore, LauncherKey, MenuItemKey } from '@renderer/types'
 import { MessageInstance } from 'antd/es/message/interface'
 import { atom, useRecoilState } from 'recoil'
 
-interface GlobalStore {
-  isBackupEnabled: boolean
-  isModpackUpdating: boolean
-  messageApi: MessageInstance | null
-  selectedMenuItem: string
-  modsPath: string
-}
 const globalStoreAtom = atom<GlobalStore>({
   key: 'global-store',
   default: {
     isBackupEnabled: true,
     isModpackUpdating: false,
-    messageApi: null,
     selectedMenuItem: 'easy-update',
-    modsPath: ''
+    selectedLauncher: 'vanilla-launcher',
+    modsPath: '',
+    messageApi: null
   }
 })
 
@@ -29,14 +24,17 @@ export const useGlobalStore = () => {
     setIsModpackUpdating: (value: boolean) => {
       setStore((state) => ({ ...state, isModpackUpdating: value }))
     },
-    setMessageApi: (value: MessageInstance | null) => {
-      setStore((state) => ({ ...state, messageApi: value }))
-    },
-    setSelectedMenuItem: (value: string) => {
+    setSelectedMenuItem: (value: MenuItemKey) => {
       setStore((state) => ({ ...state, selectedMenuItem: value }))
+    },
+    setSelectedLauncher: (value: LauncherKey) => {
+      setStore((state) => ({ ...state, selectedLauncher: value }))
     },
     setModsPath: (value: string) => {
       setStore((state) => ({ ...state, modsPath: value }))
+    },
+    setMessageApi: (value: MessageInstance | null) => {
+      setStore((state) => ({ ...state, messageApi: value }))
     }
   }
 

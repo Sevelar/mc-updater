@@ -1,6 +1,6 @@
 import { SettingTwoTone, ThunderboltTwoTone, ToolTwoTone } from '@ant-design/icons'
+import { MenuComponents, SelectedMenuItem } from '@renderer/types'
 import { MenuProps } from 'antd'
-import { ReactNode } from 'react'
 import { DetailedUpdate } from '../detailed-update'
 import { EasyUpdate } from '../easy-update'
 
@@ -29,15 +29,12 @@ export const menuItems: MenuItem[] = [
   }
 ]
 
-interface MenuComponents {
-  [key: string]: ReactNode
-}
 export const menuComponents: MenuComponents = {
   'easy-update': <EasyUpdate />,
   'detailed-update': <DetailedUpdate />,
   'restore-backup': <></>
 }
 
-export const getMenuComponent = (key: string) => {
+export const getMenuComponent = (key: SelectedMenuItem) => {
   return menuComponents[key]
 }
