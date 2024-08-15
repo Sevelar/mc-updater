@@ -7,7 +7,7 @@ export const Items = () => {
   const { setSelectedMenuItem } = useGlobalStore()
 
   const onMenuItemClick: MenuProps['onClick'] = ({ key }) => {
-    if (typeof key === 'string' && menuItemKeys.includes(key as MenuItemKey)) {
+    if (menuItemKeys.includes(key as MenuItemKey)) {
       setSelectedMenuItem(key as MenuItemKey)
     }
   }

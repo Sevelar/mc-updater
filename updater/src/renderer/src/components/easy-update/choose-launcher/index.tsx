@@ -1,10 +1,16 @@
 import { ThunderboltTwoTone } from '@ant-design/icons'
+import { useGlobalStore } from '@renderer/hooks'
+import { LauncherKey, launcherKeys } from '@renderer/types'
 import { Select } from 'antd'
 import { launchers } from './index.consts'
 
 export const ChooseLauncher = () => {
-  const onOptionSelect = (e: string) => {
-    console.log(e)
+  const { setSelectedLauncher } = useGlobalStore()
+
+  const onOptionSelect = (key: string) => {
+    if (launcherKeys.includes(key as LauncherKey)) {
+      setSelectedLauncher(key as LauncherKey)
+    }
   }
 
   return (
