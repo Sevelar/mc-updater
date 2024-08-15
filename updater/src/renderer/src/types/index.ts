@@ -19,3 +19,8 @@ export interface GlobalStore {
 export type MenuComponents = {
   [key in MenuItemKey]: ReactNode
 }
+
+export interface Launcher {
+  value: LauncherKey
+  label: string
+}

@@ -1,10 +1,12 @@
-export const launchers = [
+import { Launcher } from '@renderer/types'
+
+export const launchers: Launcher[] = [
   {
     value: 'vanilla-launcher',
     label: 'Vanilla Launcher'
   },
   {
-    value: 'prism-launcher',
-    label: 'Prism Launcher'
+    value: 'custom-launcher',
+    label: 'Custom Launcher'
   }
 ]

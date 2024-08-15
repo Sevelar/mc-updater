@@ -1,5 +1,5 @@
 import { SettingTwoTone, ThunderboltTwoTone, ToolTwoTone } from '@ant-design/icons'
-import { MenuComponents, SelectedMenuItem } from '@renderer/types'
+import { MenuComponents, MenuItemKey } from '@renderer/types'
 import { MenuProps } from 'antd'
 import { DetailedUpdate } from '../detailed-update'
 import { EasyUpdate } from '../easy-update'
@@ -35,6 +35,6 @@ export const menuComponents: MenuComponents = {
   'restore-backup': <></>
 }
 
-export const getMenuComponent = (key: SelectedMenuItem) => {
+export const getMenuComponent = (key: MenuItemKey) => {
   return menuComponents[key]
 }
