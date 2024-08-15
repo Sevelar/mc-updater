@@ -55,7 +55,7 @@ export const updateModpack = async (modsPath: string, options?: UpdateModpackOpt
       await mkdir(modsPath)
     }
 
-    if (options?.enableBackup) {
+    if (options?.isBackupEnabled) {
       const modsFolder = await readdir(modsPath)
       if (modsFolder.length) {
         // Rename mods to mods-<timestamp>
@@ -100,7 +100,7 @@ export const updateModpack = async (modsPath: string, options?: UpdateModpackOpt
     await archive.close()
   } catch (error) {
     try {
-      if (options?.enableBackup) {
+      if (options?.isBackupEnabled) {
         await access(modsPath, constants.F_OK)
         await access(backupFolderPath, constants.F_OK)
 

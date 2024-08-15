@@ -18,5 +18,5 @@ export interface RendererAPI {
 export class CustomError extends Error {}
 
 export interface UpdateModpackOptions {
-  enableBackup: boolean
+  isBackupEnabled: boolean
 }

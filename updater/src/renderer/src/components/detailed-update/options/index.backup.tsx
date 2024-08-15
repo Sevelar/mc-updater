@@ -6,7 +6,7 @@ import Text from 'antd/es/typography/Text'
 import { ReactNode, useEffect, useState } from 'react'
 
 export function Backup(): ReactNode {
-  const { isUpdating, enableBackup, setEnableBackup } = useGlobalStore()
+  const { isModpackUpdating, isBackupEnabled, setIsBackupEnabled } = useGlobalStore()
 
   const [timestamp, setTimestamp] = useState(Date.now())
 
@@ -28,9 +28,9 @@ export function Backup(): ReactNode {
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <Checkbox
-          checked={enableBackup}
-          onChange={(e) => !isUpdating && setEnableBackup(e.target.checked)}
-          disabled={isUpdating}
+          checked={isBackupEnabled}
+          onChange={(e) => !isModpackUpdating && setIsBackupEnabled(e.target.checked)}
+          disabled={isModpackUpdating}
         />
         <Tooltip
           className="flex gap-1 items-center leading-none"

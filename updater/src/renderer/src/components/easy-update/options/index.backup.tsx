@@ -6,7 +6,7 @@ import Text from 'antd/es/typography/Text'
 import { ReactNode, useEffect, useState } from 'react'
 
 export function Backup(): ReactNode {
-  const { isUpdating, enableBackup, setEnableBackup } = useGlobalStore()
+  const { isModpackUpdating, isBackupEnabled, setIsBackupEnabled } = useGlobalStore()
 
   const [timestamp, setTimestamp] = useState(Date.now())
 
@@ -28,9 +28,9 @@ export function Backup(): ReactNode {
     <Flex vertical gap={5}>
       <Flex gap={5}>
         <Checkbox
-          checked={enableBackup}
-          onChange={(e) => !isUpdating && setEnableBackup(e.target.checked)}
-          disabled={isUpdating}
+          checked={isBackupEnabled}
+          onChange={(e) => !isModpackUpdating && setIsBackupEnabled(e.target.checked)}
+          disabled={isModpackUpdating}
         />
         <Text strong>
           Create <Text code>mods</Text> folder backup before update.

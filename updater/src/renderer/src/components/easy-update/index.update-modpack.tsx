@@ -7,19 +7,20 @@ import { ReactNode } from 'react'
 const rendererAPI = window.api as RendererAPI
 
 export const UpdateModpack = (): ReactNode => {
-  const { messageApi, modsPath, enableBackup, isUpdating, setIsUpdating } = useGlobalStore()
+  const { messageApi, modsPath, isBackupEnabled, isModpackUpdating, setIsModpackUpdating } =
+    useGlobalStore()
 
   async function onUpdateModpack(): Promise<void> {
-    setIsUpdating(true)
+    setIsModpackUpdating(true)
     try {
-      await rendererAPI.updateModpack(modsPath, { enableBackup })
+      await rendererAPI.updateModpack(modsPath, { isBackupEnabled })
       messageApi!.success(t.success_modpack_updated)
     } catch (error) {
       if (error instanceof Error) {
         messageApi!.error(error.message)
       }
     } finally {
-      setIsUpdating(false)
+      setIsModpackUpdating(false)
     }
   }
 
@@ -27,8 +28,8 @@ export const UpdateModpack = (): ReactNode => {
     <Button
       type="primary"
       size="large"
-      onClick={() => !isUpdating && onUpdateModpack()}
-      loading={isUpdating}
+      onClick={() => !isModpackUpdating && onUpdateModpack()}
+      loading={isModpackUpdating}
     >
       Update Modpack
     </Button>
