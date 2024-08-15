@@ -1,6 +1,7 @@
 import { SettingTwoTone, ThunderboltTwoTone, ToolTwoTone } from '@ant-design/icons'
 import { MenuProps } from 'antd'
 import { ReactNode } from 'react'
+import { DetailedUpdate } from '../detailed-update'
 import { EasyUpdate } from '../easy-update'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -33,7 +34,7 @@ interface MenuComponents {
 }
 export const menuComponents: MenuComponents = {
   'easy-update': <EasyUpdate />,
-  'detailed-update': <></>,
+  'detailed-update': <DetailedUpdate />,
   'restore-backup': <></>
 }
 

@@ -27,7 +27,6 @@ export const UpdateModpack = (): ReactNode => {
     <Button
       type="primary"
       size="large"
-      className="mt-5"
       onClick={() => !isUpdating && onUpdateModpack()}
       loading={isUpdating}
     >

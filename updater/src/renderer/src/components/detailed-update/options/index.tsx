@@ -1,11 +1,10 @@
-import Flex from 'antd/es/flex'
 import { ReactNode } from 'react'
 import { Backup } from './index.backup'
 
 export function Options(): ReactNode {
   return (
-    <Flex vertical className="bg-gray-200 p-2 rounded-lg">
+    <div className="flex flex-col rounded-lg p-2 bg-gray-200">
       <Backup />
-    </Flex>
+    </div>
   )
 }
