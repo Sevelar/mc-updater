@@ -1,5 +1,7 @@
+import { FireTwoTone } from '@ant-design/icons'
 import { RendererAPI } from '@shared/index.types'
 import { Modal } from 'antd'
+import { Typography } from 'antd'
 import { useEffect, useState } from 'react'
 
 const rendererAPI = window.api as RendererAPI
@@ -22,8 +24,19 @@ export const AppUpdateModal = () => {
   }
 
   return (
-    <Modal title="Application Update available!" open={isOpen} {...{ onOk, onCancel }}>
-      A new update for the Updater application is available.
+    <Modal
+      open={isOpen}
+      title={
+        <>
+          <FireTwoTone twoToneColor="red" className="mr-1" />
+          <Typography.Text strong>Application update available!</Typography.Text>
+        </>
+      }
+      centered
+      okText="Update"
+      {...{ onOk, onCancel }}
+    >
+      A new update for the updater application is available.
     </Modal>
   )
 }

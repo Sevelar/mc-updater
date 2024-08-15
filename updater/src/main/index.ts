@@ -2,7 +2,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { BrowserWindow, app, shell } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
-import { createAutoUpdateHandlers, createIPCHandlers } from './handlers'
+import { createIPCHandlers } from './handlers'
 
 function createWindow(): BrowserWindow {
   // Create the browser window.
@@ -55,7 +55,6 @@ app.whenReady().then(() => {
 
   const mainWindow = createWindow()
   createIPCHandlers(mainWindow)
-  createAutoUpdateHandlers(mainWindow)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

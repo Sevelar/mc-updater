@@ -1,6 +1,7 @@
+import { t } from '@shared/index.consts'
+import { CustomError, UpdateModpackOptions } from '@shared/index.types'
 import { randomUUID } from 'crypto'
-import { BrowserWindow, dialog, ipcMain } from 'electron'
-import { autoUpdater } from 'electron-updater'
+import { BrowserWindow, dialog } from 'electron'
 import { createWriteStream } from 'fs'
 import { access, constants, lstat, mkdir, readdir, rename, rm, unlink } from 'fs/promises'
 import { tmpdir } from 'os'
@@ -8,30 +9,8 @@ import { join, resolve } from 'path'
 import { Readable } from 'stream'
 import { finished, pipeline } from 'stream/promises'
 import yauzl from 'yauzl-promise'
-import { t } from '../index.consts'
-import { CustomError, UpdateModpackOptions } from '../index.types'
 
-export function createIPCHandlers(mainWindow: BrowserWindow): void {
-  ipcMain.handle('get-mods-path', getModsPath)
-  ipcMain.handle('choose-directory', () => chooseDirectory(mainWindow))
-  ipcMain.handle('update-modpack', (_event, path: string, options?: UpdateModpackOptions) =>
-    updateModpack(path, options)
-  )
-}
-
-export function createAutoUpdateHandlers(mainWindow: BrowserWindow): void {
-  autoUpdater.on('update-available', () => mainWindow.webContents.send('app-update-available'))
-  ipcMain.on('on-app-update-download', onAppUpdateDownload)
-
-  autoUpdater.on('download-progress', () =>
-    mainWindow.webContents.send('app-update-download-progress')
-  )
-
-  autoUpdater.on('update-downloaded', () => mainWindow.webContents.send('app-update-downloaded'))
-  ipcMain.on('on-app-update-install', onAppUpdateInstall)
-}
-
-async function getModsPath(): Promise<string> {
+export const getModsPath = async () => {
   if (!process.env.APPDATA) throw t.error_no_appdata_env
 
   const path = join(process.env.APPDATA, '.minecraft/mods')
@@ -44,7 +23,7 @@ async function getModsPath(): Promise<string> {
   }
 }
 
-async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | false> {
+export const chooseDirectory = async (mainWindow: BrowserWindow) => {
   try {
     const response = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory'] })
     if (response.canceled) return false
@@ -61,7 +40,7 @@ async function chooseDirectory(mainWindow: BrowserWindow): Promise<string | fals
   }
 }
 
-async function updateModpack(modsPath: string, options?: UpdateModpackOptions): Promise<void> {
+export const updateModpack = async (modsPath: string, options?: UpdateModpackOptions) => {
   if (!modsPath) throw t.error_no_mods_path
 
   const tempFolderPath = join(tmpdir(), `updater-${randomUUID()}`)
@@ -146,12 +125,4 @@ async function updateModpack(modsPath: string, options?: UpdateModpackOptions): 
     await access(tempFolderPath, constants.F_OK)
     await rm(tempFolderPath, { recursive: true, force: true })
   }
-}
-
-async function onAppUpdateDownload() {
-  autoUpdater.downloadUpdate()
-}
-
-async function onAppUpdateInstall() {
-  autoUpdater.quitAndInstall(true)
 }

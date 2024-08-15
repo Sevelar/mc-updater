@@ -14,13 +14,16 @@ export const AppUpdateRestart = () => {
   }, [])
 
   return isOpen ? (
-    <Result
-      title="Application update has been downloaded!"
-      extra={[
-        <Button key="restart" type="primary" onClick={rendererAPI.installAppUpdate}>
-          Restart the application
-        </Button>
-      ]}
-    />
+    <div className="fixed top-0 left-0 h-full w-full bg-white">
+      <Result
+        title="Application update has been downloaded!"
+        extra={[
+          <Button key="restart" type="primary" size="large" onClick={rendererAPI.installAppUpdate}>
+            Restart the application
+          </Button>
+        ]}
+        className="flex flex-col justify-center items-center h-full"
+      />
+    </div>
   ) : null
 }

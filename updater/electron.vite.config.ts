@@ -4,6 +4,11 @@ import { resolve } from 'path'
 
 export default defineConfig({
   main: {
+    resolve: {
+      alias: {
+        '@shared': resolve('src/')
+      }
+    },
     plugins: [externalizeDepsPlugin()]
   },
   preload: {

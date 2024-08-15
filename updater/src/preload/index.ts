@@ -4,18 +4,33 @@ import { RendererAPI, UpdateModpackOptions } from '../index.types'
 
 // Custom APIs for renderer
 const api: RendererAPI = {
-  getModsPath: () => ipcRenderer.invoke('get-mods-path'),
-  chooseDirectory: () => ipcRenderer.invoke('choose-directory'),
-  updateModpack: (modsPath: string, options?: UpdateModpackOptions) =>
-    ipcRenderer.invoke('update-modpack', modsPath, options),
-  onAppUpdateAvailable: (callback: () => void) =>
-    ipcRenderer.on('app-update-available', () => callback()),
-  onAppUpdateDownloadProgress: (callback: () => void) =>
-    ipcRenderer.on('app-update-download-progress', () => callback()),
-  onAppUpdateDownloaded: (callback: () => void) =>
-    ipcRenderer.on('app-update-downloaded', () => callback()),
-  downloadAppUpdate: () => ipcRenderer.send('on-app-update-download'),
-  installAppUpdate: () => ipcRenderer.send('on-app-update-install')
+  // index.main.ts
+  getModsPath: () => {
+    return ipcRenderer.invoke('get-mods-path')
+  },
+  chooseDirectory: () => {
+    return ipcRenderer.invoke('choose-directory')
+  },
+  updateModpack: (modsPath: string, options?: UpdateModpackOptions) => {
+    return ipcRenderer.invoke('update-modpack', modsPath, options)
+  },
+
+  // index.updater.ts
+  onAppUpdateAvailable: (callback) => {
+    return ipcRenderer.on('app-update-available', () => callback())
+  },
+  onAppUpdateDownloadProgress: (callback) => {
+    return ipcRenderer.on('app-update-download-progress', () => callback())
+  },
+  onAppUpdateDownloaded: (callback) => {
+    return ipcRenderer.on('app-update-downloaded', () => callback())
+  },
+  downloadAppUpdate: () => {
+    return ipcRenderer.send('on-app-update-download')
+  },
+  installAppUpdate: () => {
+    return ipcRenderer.send('on-app-update-install')
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -2,6 +2,7 @@ import Flex from 'antd/es/flex'
 import useMessage from 'antd/es/message/useMessage'
 import { useEffect } from 'react'
 import { ChooseDirectory } from './components/choose-directory'
+import { Modals } from './components/modals'
 import { Options } from './components/options'
 import { UpdateModpack } from './components/update-modpack'
 import { useGlobalStore } from './index.hooks'
@@ -23,6 +24,7 @@ export function App(): JSX.Element {
       <ChooseDirectory />
       <Options />
       <UpdateModpack />
+      <Modals />
     </Flex>
   )
 }
